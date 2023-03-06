@@ -16,6 +16,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from app.books.views import server_testing
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path("prueba/", server_testing, name="Server Testing!")
 ]
