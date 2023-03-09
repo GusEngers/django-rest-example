@@ -37,6 +37,7 @@ class OneDetail(APIView):
         book = self.get_one(pk)
         if type(book) == str:
             return Response({"error": book}, status=status.HTTP_404_NOT_FOUND)
+        
         serializer = BookSerializer(book)
         return Response({"data": serializer.data}, status=status.HTTP_200_OK)
     
@@ -52,9 +53,18 @@ class OneDetail(APIView):
             "year": rd["year"] if "year" in rd else getattr(book, "year"),
             "author": rd["author"] if "author" in rd else getattr(book, "author")
         }
+
         serializer = BookSerializer(book, data=updates)
         if serializer.is_valid():
             serializer.save()
             return Response({"data": f"Libro {serializer.data['title']} actualizado", "upd": serializer.data}, status=status.HTTP_201_CREATED)
         return Response({"error": serializer.errors})
+    
+    def delete(self, request, pk):
+        book = self.get_one(pk)
+        if type(book) == str:
+            return Response({"error": book}, status=status.HTTP_404_NOT_FOUND)
+        
+        book.delete()
+        return Response({"data": f"Libro {getattr(book, 'title')} eliminado"}, status=status.HTTP_202_ACCEPTED)
         
