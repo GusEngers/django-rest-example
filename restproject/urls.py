@@ -16,8 +16,6 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-from app.books.views import server_testing
-
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("", include("app.books.urls"))
