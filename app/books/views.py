@@ -28,3 +28,18 @@ class PostAndList(APIView):
             data["data"] = serializer.data
             return Response(data, status=status.HTTP_200_OK)
         return Response(data, status=status.HTTP_404_NOT_FOUND)
+
+class OneDetail(APIView):
+
+    def get_one(self, pk):
+        try:
+            return Books.objects.get(pk=pk)
+        except Books.DoesNotExist:
+            return "El libro solicitado no existe"
+    
+    def get(self, request, pk):
+        book = self.get_one(pk)
+        if type(book) == str:
+            return Response({"data": book}, status=status.HTTP_404_NOT_FOUND)
+        serializer = BookSerializer(book)
+        return Response({"data": serializer.data}, status=status.HTTP_200_OK)
